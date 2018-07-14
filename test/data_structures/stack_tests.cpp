@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <stack>
 
-#include "../src/ds/stack.hpp"
+#include "../../src/data_structures/stack.hpp"
 
-namespace ds::test {
+namespace algo::ds::test {
 
 TEST(Stack, Constructor_Overload1) {
     Stack<int> s;

@@ -1,5 +1,5 @@
-#ifndef __DS_STACK_HPP__
-#define __DS_STACK_HPP__
+#ifndef __STACK_HPP__
+#define __STACK_HPP__
 
 #include <cassert>
 #include <cstddef>
@@ -8,7 +8,7 @@
 #include <memory>
 #include <type_traits>
 
-namespace ds {
+namespace algo::ds {
 
 template <typename T, typename TAlloc = std::allocator<T>>
 class Stack {
