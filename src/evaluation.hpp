@@ -2,18 +2,15 @@
 #define __EVALUATION_HPP__
 
 #include <cmath>
-#include <string>
 #include <sstream>
+#include <string>
 
-#include "../data_structures/stack.hpp"
+#include "stack.hpp"
 
-namespace algo {
+namespace alg {
 
 bool is_operator(std::string token) {
-    return token == "+" ||
-           token == "-" ||
-           token == "*" ||
-           token == "/" ||
+    return token == "+" || token == "-" || token == "*" || token == "/" ||
            token == "sqrt";
 }
 // Dijkstra 双栈表达式求值算法
@@ -47,9 +44,9 @@ double evaluate(std::string expr) {
             vals.push(std::stod(token));
         }
     }
-   return vals.pop();
+    return vals.pop();
 }
 
-}
+}  // namespace algo
 
 #endif

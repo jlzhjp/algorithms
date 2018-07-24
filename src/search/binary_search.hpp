@@ -3,12 +3,12 @@
 
 #include <cassert>
 #include <iostream>
-#include <vector>
+#include "../vector.hpp"
 
-namespace algo {
+namespace alg {
 
 template <typename Comparable>
-int binary_search(Comparable key, const std::vector<Comparable> &vec) {
+int binary_search(Comparable key, const ds::Vector<Comparable> &vec) {
     int lo = 0,
         hi = vec.size() - 1;
     while (lo <= hi) {
@@ -23,5 +23,6 @@ int binary_search(Comparable key, const std::vector<Comparable> &vec) {
     return -1;
 }
 
-} // namespace algo
+} // namespace alg
+
 #endif
