@@ -519,7 +519,7 @@ template <typename V, typename A>
 inline bool operator>=(const Vector<V, A> &lhs, const Vector<V, A> &rhs) {
     return !(lhs < rhs);
 }
-}  // namespace alg::ds
+}  // namespace alg
 
 namespace std {
 template <typename T>
