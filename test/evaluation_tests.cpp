@@ -2,7 +2,7 @@
 
 #include "../src/evaluation.hpp"
 
-namespace alg::math::test {
+namespace alg::test {
 
 TEST(DijkstraExpressionEvaluation, Simple) {
     double result = alg::evaluate("( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )");

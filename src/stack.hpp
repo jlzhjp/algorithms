@@ -10,7 +10,7 @@
 
 #include "./vector.hpp"
 
-namespace alg::ds {
+namespace alg {
 
 template <typename T, typename TContainer = Vector<T>>
 class Stack {
@@ -87,10 +87,10 @@ template <typename V, typename C>
 inline bool operator>=(const Stack<V, C> &lhs, const Stack<V, C> &rhs) {
     return !(lhs < rhs);
 }
-}  // namespace alg::ds
+}  // namespace alg
 namespace std {
 template <typename V, typename C>
-void swap(alg::ds::Stack<V, C> &lhs, alg::ds::Stack<V, C> &rhs) {
+void swap(alg::Stack<V, C> &lhs, alg::Stack<V, C> &rhs) {
     lhs.swap(rhs);
 }
 }  // namespace std

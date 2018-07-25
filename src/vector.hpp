@@ -7,7 +7,7 @@
 #include <limits>
 #include <memory>
 
-namespace alg::ds {
+namespace alg {
 
 template <typename T, typename TAlloc = std::allocator<T>>
 class Vector {
@@ -43,8 +43,8 @@ class Vector {
     const_reference operator[](size_type n) const;
 
    public:
-    void assign(size_type count, const value_type& val);
-    template<typename InputIter>
+    void assign(size_type count, const value_type &val);
+    template <typename InputIter>
     void assign(InputIter first, InputIter last);
     void assign(std::initializer_list<value_type> vals);
     void push_back(const value_type &val);
@@ -191,7 +191,7 @@ inline auto Vector<V, A>::operator[](size_type n) const -> const_reference {
     return _data[n];
 }
 template <typename V, typename A>
-void Vector<V, A>::assign(size_type count, const value_type& val) {
+void Vector<V, A>::assign(size_type count, const value_type &val) {
     erase(begin(), end());
     std::uninitialized_fill_n(begin(), count, val);
 }
@@ -202,7 +202,7 @@ void Vector<V, A>::assign(InputIter first, InputIter last) {
     std::uninitialized_copy(first, last, begin());
 }
 template <typename V, typename A>
-void Vector<V ,A>::assign(std::initializer_list<value_type> vals) {
+void Vector<V, A>::assign(std::initializer_list<value_type> vals) {
     erase(begin(), end());
     std::uninitialized_copy(vals.begin(), vals.end(), begin());
 }
@@ -271,7 +271,7 @@ auto Vector<V, A>::erase(const_iterator b, const_iterator e) -> iterator {
     for (pointer p = pbegin; p != e; ++p) {
         destroy(p);
     }
-    for (pointer pb = pbegin, pe = get_ptr(e); pe != end(); ++pb, ++pe) {
+    for (pointer pb = pbegin, pe = get_ptr(e); pe != end_ptr(); ++pb, ++pe) {
         construct(pb, std::move(*pe));
     }
     _size -= std::distance(b, e);
@@ -288,9 +288,9 @@ inline void Vector<V, A>::resize(size_type n) {
 }
 template <typename V, typename A>
 void Vector<V, A>::resize(size_type n, const value_type &val) {
-    if (n <_size) {
+    if (n < _size) {
         erase(begin() + n, end());
-    } else if ( n > _size) {
+    } else if (n > _size) {
         insert(end(), n, val);
     }
 }
@@ -523,7 +523,7 @@ inline bool operator>=(const Vector<V, A> &lhs, const Vector<V, A> &rhs) {
 
 namespace std {
 template <typename T>
-void swap(alg::ds::Vector<T> &lhs, alg::ds::Vector<T> &rhs) {
+void swap(alg::Vector<T> &lhs, alg::Vector<T> &rhs) {
     lhs.swap(rhs);
 }
 }  // namespace std

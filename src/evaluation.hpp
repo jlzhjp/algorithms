@@ -16,8 +16,8 @@ bool is_operator(std::string token) {
 // Dijkstra 双栈表达式求值算法
 double evaluate(std::string expr) {
     std::istringstream t_stream(expr);
-    ds::Stack<std::string> ops;
-    ds::Stack<double> vals;
+    Stack<std::string> ops;
+    Stack<double> vals;
 
     std::string token;
     while (t_stream >> token) {
@@ -47,6 +47,6 @@ double evaluate(std::string expr) {
     return vals.pop();
 }
 
-}  // namespace algo
+}  // namespace alg
 
 #endif

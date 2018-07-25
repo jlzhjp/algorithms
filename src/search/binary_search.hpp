@@ -8,9 +8,8 @@
 namespace alg {
 
 template <typename Comparable>
-int binary_search(Comparable key, const ds::Vector<Comparable> &vec) {
-    int lo = 0,
-        hi = vec.size() - 1;
+int binary_search(Comparable key, const Vector<Comparable> &vec) {
+    int lo = 0, hi = vec.size() - 1;
     while (lo <= hi) {
         int mid = lo + (hi - lo) / 2;
         if (key < vec[mid])
@@ -23,6 +22,6 @@ int binary_search(Comparable key, const ds::Vector<Comparable> &vec) {
     return -1;
 }
 
-} // namespace alg
+}  // namespace alg
 
 #endif
