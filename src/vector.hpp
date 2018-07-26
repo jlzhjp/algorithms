@@ -29,8 +29,8 @@ class Vector {
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
    public:
-    Vector();
-    Vector(size_type initcap);
+    explicit Vector();
+    explicit Vector(size_type initcap);
     Vector(std::initializer_list<value_type> vals);
     Vector(const Vector &rhs);
     Vector(Vector &&rhs);

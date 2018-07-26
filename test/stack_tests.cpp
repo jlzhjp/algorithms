@@ -7,11 +7,13 @@ namespace alg::test {
 TEST(Stack, Constructor_Overload1) {
     Stack<int> s1;
     EXPECT_EQ(0, s1.size());
-    Stack<std::string> s2(5);
-    EXPECT_EQ(0, s2.size());
-    EXPECT_EQ(5, s2.capacity());
-    Stack<std::string> s3 = {"A", "B"};
-    EXPECT_EQ(2, s3.size());
+
+    Stack<std::string> s2 = {"A", "B"};
+    EXPECT_EQ(2, s2.size());
+
+    Stack<std::string> s3(Vector<std::string>({"A", "B"}));
+    EXPECT_EQ("B", s3.pop());
+    EXPECT_EQ("A", s3.pop());
 }
 TEST(Stack, CopyConstructor) {
     Stack<std::string> s1 = {"A", "B"};
@@ -78,7 +80,7 @@ TEST(Stack, Swap) {
 }
 
 TEST(Stack, Stress) {
-    Stack<std::string> s(0);
+    Stack<std::string> s;
     for (int i = 0; i <= 10000; ++i) {
         s.push(std::to_string(i));
     }
