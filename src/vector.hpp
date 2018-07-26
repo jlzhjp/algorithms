@@ -112,6 +112,7 @@ class Vector {
     pointer get_ptr(const_iterator iter) noexcept;
     const_pointer get_ptr(const_iterator iter) const noexcept;
     pointer alloc_block_n(const_iterator pos, size_type n);
+    void modify_capacity(size_type n);
 
    private:
     static constexpr size_type _kSpareSpace = 16;
@@ -160,7 +161,7 @@ template <typename V, typename A>
 auto Vector<V, A>::operator=(const Vector &rhs) -> Vector & {
     if (std::addressof(rhs) == this) return *this;
     erase(begin(), end());
-    reserve(rhs._capacity);
+    modify_capacity(rhs._capacity);
     std::uninitialized_copy_n(rhs.begin(), rhs.size(), begin());
     _size = rhs._size;
     _alloc = rhs._alloc;
@@ -192,19 +193,23 @@ inline auto Vector<V, A>::operator[](size_type n) const -> const_reference {
 }
 template <typename V, typename A>
 void Vector<V, A>::assign(size_type count, const value_type &val) {
-    erase(begin(), end());
+    clear();
+    if (capacity() < count) modify_capacity(count + _kSpareSpace);
     std::uninitialized_fill_n(begin(), count, val);
+    _size = count;
 }
 template <typename V, typename A>
 template <typename InputIter>
 void Vector<V, A>::assign(InputIter first, InputIter last) {
-    erase(begin(), end());
-    std::uninitialized_copy(first, last, begin());
+    clear();
+    for (InputIter iter = first; iter != last; ++iter) push_back(*iter);
 }
 template <typename V, typename A>
 void Vector<V, A>::assign(std::initializer_list<value_type> vals) {
-    erase(begin(), end());
+    clear();
+    if (capacity() < vals.size()) modify_capacity(vals.size() + _kSpareSpace);
     std::uninitialized_copy(vals.begin(), vals.end(), begin());
+    _size = vals.size();
 }
 template <typename V, typename A>
 inline void Vector<V, A>::push_back(const value_type &val) {
@@ -222,7 +227,10 @@ template <typename V, typename A>
 template <typename... TArgs>
 inline auto Vector<V, A>::emplace(const_iterator pos, TArgs &&... args)
     -> iterator {
-    return insert(pos, value_type(std::forward<TArgs>(args)...));
+    pointer p = alloc_block_n(pos, 1);
+    construct(p, std::forward<TArgs>(args)...);
+    ++_size;
+    return iterator(p);
 }
 template <typename V, typename A>
 template <typename... TArgs>
@@ -232,17 +240,11 @@ void Vector<V, A>::emplace_back(TArgs &&... args) {
 template <typename V, typename A>
 auto Vector<V, A>::insert(const_iterator pos, const value_type &val)
     -> iterator {
-    pointer p = alloc_block_n(pos, 1);
-    construct(p, val);
-    ++_size;
-    return iterator(p);
+    return emplace(pos, val);
 }
 template <typename V, typename A>
 auto Vector<V, A>::insert(const_iterator pos, value_type &&val) -> iterator {
-    pointer p = alloc_block_n(pos, 1);
-    construct(p, std::forward<value_type>(val));
-    ++_size;
-    return iterator(p);
+    return emplace(pos, std::forward<value_type>(val));
 }
 template <typename V, typename A>
 auto Vector<V, A>::insert(const_iterator pos, size_type count,
@@ -268,19 +270,20 @@ template <typename V, typename A>
 auto Vector<V, A>::erase(const_iterator b, const_iterator e) -> iterator {
     pointer pbegin = get_ptr(b);
     if (b == e) return pbegin;
+    size_type s = _size;
     for (pointer p = pbegin; p != e; ++p) {
         destroy(p);
+        --s;
     }
     for (pointer pb = pbegin, pe = get_ptr(e); pe != end_ptr(); ++pb, ++pe) {
         construct(pb, std::move(*pe));
     }
-    _size -= std::distance(b, e);
+    _size = s;
     return iterator(pbegin);
 }
 template <typename V, typename A>
-void Vector<V, A>::clear() {
+inline void Vector<V, A>::clear() {
     erase(begin(), end());
-    reserve(_kSpareSpace);
 }
 template <typename V, typename A>
 inline void Vector<V, A>::resize(size_type n) {
@@ -291,20 +294,16 @@ void Vector<V, A>::resize(size_type n, const value_type &val) {
     if (n < _size) {
         erase(begin() + n, end());
     } else if (n > _size) {
-        insert(end(), n, val);
+        insert(end(), n - size(), val);
     }
 }
 template <typename V, typename A>
 void Vector<V, A>::reserve(size_type n) {
-    pointer old = _data;
-    _data = allocate(n);
-    std::uninitialized_move_n(old, _size, _data);
-    deallocate(old, _capacity);
-    _capacity = n;
+    if (n > capacity()) modify_capacity(n);
 }
 template <typename V, typename A>
 inline void Vector<V, A>::shrink_to_fit() {
-    reserve(_size);
+    modify_capacity(_size);
 }
 template <typename V, typename A>
 void Vector<V, A>::swap(Vector &rhs) {
@@ -383,7 +382,7 @@ auto Vector<V, A>::front() noexcept -> reference {
 }
 template <typename V, typename A>
 auto Vector<V, A>::front() const noexcept -> const_reference {
-    return front();
+    return _data[0];
 }
 template <typename V, typename A>
 auto Vector<V, A>::back() noexcept -> reference {
@@ -391,7 +390,7 @@ auto Vector<V, A>::back() noexcept -> reference {
 }
 template <typename V, typename A>
 auto Vector<V, A>::back() const noexcept -> const_reference {
-    return back();
+    return _data[_size - 1];
 }
 template <typename V, typename A>
 auto Vector<V, A>::data() noexcept -> pointer {
@@ -399,7 +398,7 @@ auto Vector<V, A>::data() noexcept -> pointer {
 }
 template <typename V, typename A>
 auto Vector<V, A>::data() const noexcept -> const_pointer {
-    return data();
+    return _data;
 }
 template <typename V, typename A>
 bool Vector<V, A>::empty() const noexcept {
@@ -415,7 +414,7 @@ auto Vector<V, A>::capacity() const noexcept -> size_type {
 }
 template <typename V, typename A>
 auto Vector<V, A>::max_size() const noexcept -> size_type {
-    return std::min(alloc_traits::max_size(),
+    return std::min(alloc_traits::max_size(_alloc),
                     std::numeric_limits<size_type>::max());
 }
 template <typename V, typename A>
@@ -477,10 +476,10 @@ auto Vector<V, A>::get_ptr(const_iterator iter) const noexcept
 template <typename V, typename A>
 auto Vector<V, A>::alloc_block_n(const_iterator pos, size_type n) -> pointer {
     pointer ppos = get_ptr(pos);
-    if (_capacity < size() + n) {
+    if (_capacity < _size + n) {
         auto index = std::distance(cbegin(), pos);
         assert(index >= 0);
-        reserve(2 * (size() + n));
+        modify_capacity(2 * (size() + n));
         ppos = begin_ptr() + index;
     }
     if (ppos == end_ptr()) return ppos;
@@ -490,6 +489,16 @@ auto Vector<V, A>::alloc_block_n(const_iterator pos, size_type n) -> pointer {
         construct(p + n, std::move(*p));
     } while (p != ppos);
     return ppos;
+}
+template <typename V, typename A>
+void Vector<V, A>::modify_capacity(size_type n) {
+    assert(n >= _size);
+    assert(n <= max_size());
+    pointer old = _data;
+    _data = allocate(n);
+    std::uninitialized_move_n(old, _size, _data);
+    deallocate(old, _capacity);
+    _capacity = n;
 }
 
 template <typename V, typename A>

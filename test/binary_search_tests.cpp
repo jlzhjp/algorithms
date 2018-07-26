@@ -15,4 +15,4 @@ TEST(BinarySearchTest, NotContain) {
     ASSERT_EQ(-1, binary_search<int>(5, v));
 }
 
-}  // namespace alg::search::test
+}  // namespace alg::test

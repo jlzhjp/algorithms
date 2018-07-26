@@ -13,4 +13,5 @@ TEST(DijkstraExpressionEvaluation, Function) {
     double result = alg::evaluate("( ( 1 + sqrt ( 5.0 ) ) / 2.0 )");
     EXPECT_EQ((1 + std::sqrt(5.0)) / 2.0, result);
 }
-}
+
+}  // namespace alg::test

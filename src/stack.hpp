@@ -87,12 +87,15 @@ template <typename V, typename C>
 inline bool operator>=(const Stack<V, C> &lhs, const Stack<V, C> &rhs) {
     return !(lhs < rhs);
 }
+
 }  // namespace alg
 namespace std {
+
 template <typename V, typename C>
 void swap(alg::Stack<V, C> &lhs, alg::Stack<V, C> &rhs) {
     lhs.swap(rhs);
 }
+
 }  // namespace std
 
 #endif
