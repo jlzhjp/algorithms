@@ -8,11 +8,11 @@ namespace alg::test {
 
 TEST(BinarySearchTest, Contains) {
     Vector<int> v = {1, 2, 3, 4};
-    ASSERT_EQ(1, binary_search<int>(2, v));
+    ASSERT_EQ(v.begin() + 1, binary_search(v.begin(), v.end(), 2));
 }
 TEST(BinarySearchTest, NotContain) {
     Vector<int> v = {1, 2, 3, 4};
-    ASSERT_EQ(-1, binary_search<int>(5, v));
+    ASSERT_EQ(v.end(), binary_search(v.begin(), v.end(), 5));
 }
 
 }  // namespace alg::test

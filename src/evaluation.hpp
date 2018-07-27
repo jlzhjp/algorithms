@@ -9,15 +9,15 @@
 
 namespace alg {
 
-bool is_operator(std::string token) {
-    return token == "+" || token == "-" || token == "*" || token == "/" ||
-           token == "sqrt";
-}
 // Dijkstra 双栈表达式求值算法
-double evaluate(std::string expr) {
+double evaluate(const std::string &expr) {
     std::istringstream t_stream(expr);
     Stack<std::string> ops;
     Stack<double> vals;
+    auto is_operator = [](const std::string &token) {
+        return token == "+" || token == "-" || token == "*" || token == "/" ||
+               token == "sqrt";
+    };
 
     std::string token;
     while (t_stream >> token) {
