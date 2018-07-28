@@ -2,4 +2,6 @@ a.out
 test.cpp
 .vscode/
 *.pch
+*.tu
+*.gch
 vgcore.*
