@@ -8,25 +8,25 @@
 namespace alg::test {
 
 TEST(SelectionSort, Asc) {
-    Vector<int> v = {4, 3, 0, 1, 3, 2, 5};
+    Vector<int> v = gen_random_seq(10);
     selection_sort(v.begin(), v.end());
     EXPECT_TRUE(is_sorted(v.begin(), v.end(), compare_asc<int>))
         << gen_content_str(v.begin(), v.end());
 }
 TEST(SelectionSort, Desc) {
-    Vector<int> v = {4, 3, 0, 1, 3, 2, 5};
+    Vector<int> v = gen_random_seq(10);
     selection_sort(v.begin(), v.end(), compare_desc<int>);
     EXPECT_TRUE(is_sorted(v.begin(), v.end(), compare_desc<int>))
         << gen_content_str(v.begin(), v.end());
 }
 TEST(InsertionSort, Asc) {
-    Vector<int> v = {4, 3, 0, 1, 3, 2, 5};
+    Vector<int> v = gen_random_seq(10);
     insertion_sort(v.begin(), v.end(), compare_desc<int>);
     EXPECT_TRUE(is_sorted(v.begin(), v.end(), compare_desc<int>))
         << gen_content_str(v.begin(), v.end());
 }
 TEST(InsertionSort, Desc) {
-    Vector<int> v = {4, 3, 0, 1, 3, 2, 5};
+    Vector<int> v = gen_random_seq(10);
     insertion_sort(v.begin(), v.end(), compare_desc<int>);
     EXPECT_TRUE(is_sorted(v.begin(), v.end(), compare_desc<int>))
         << gen_content_str(v.begin(), v.end());

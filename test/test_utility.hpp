@@ -29,7 +29,7 @@ std::string gen_content_str(InputIt first, InputIt last) {
     return result + "}";
 }
 // 生成 +-100 以内的随机数序列
-Vector<int> gen_random_sequence(Vector<int>::size_type n) {
+Vector<int> gen_random_seq(Vector<int>::size_type n) {
     Vector<int> result;
     std::random_device rand;
     for (auto i = n; i != 0; --i) {
