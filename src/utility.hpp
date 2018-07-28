@@ -3,17 +3,16 @@
 
 namespace alg {
 
+// Binary function that accepts two elements in the range as arguments,
+// and returns a value convertible to bool.
+// The value returned indicates whether the element passed as first argument is considered less than the second.
 template <typename T>
-int compare_asc(const T &lhs, const T &rhs) {
-    if (lhs < rhs) return -1;
-    if (lhs > rhs) return 1;
-    return 0;
+bool compare_asc(const T &lhs, const T &rhs) {
+    return lhs < rhs;
 }
 template <typename T>
-int compare_desc(const T &lhs, const T &rhs) {
-    if (lhs < rhs) return 1;
-    if (lhs > rhs) return -1;
-    return 0;
+bool compare_desc(const T &lhs, const T &rhs) {
+    return lhs > rhs;
 }
 
 }  // namespace alg

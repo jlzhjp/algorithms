@@ -11,7 +11,7 @@ namespace alg {
 template <typename BidirectIt, typename TComparer>
 void insertion_sort(BidirectIt first, BidirectIt last, TComparer comp) {
     for (BidirectIt i = std::next(first); i != last; ++i) {
-        for (BidirectIt j = i; j > first && comp(*std::prev(j), *j) > 0; --j) {
+        for (BidirectIt j = i; j > first && comp(*j, *std::prev(j)); --j) {
             std::swap(*std::prev(j), *j);
         }
     }

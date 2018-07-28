@@ -14,7 +14,7 @@ template <typename ForwardIt, typename TComparer>
 bool is_sorted(ForwardIt first, ForwardIt last, TComparer comp) {
     ForwardIt prev = first;
     for (++first; first != last; ++first, ++prev) {
-        if (comp(*prev, *first) > 0) return false;
+        if (comp(*first, *prev)) return false;
     }
     return true;
 }

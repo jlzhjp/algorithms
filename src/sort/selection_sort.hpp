@@ -1,6 +1,7 @@
 #ifndef __SELECTION_SORT_HPP__
 #define __SELECTION_SORT_HPP__
 
+#include <algorithm>
 #include <iterator>
 #include <utility>
 #include "../utility.hpp"
@@ -9,12 +10,8 @@ namespace alg {
 
 template <typename ForwardIt, typename TComparer>
 void selection_sort(ForwardIt first, ForwardIt last, TComparer comp) {
-    for (ForwardIt i = first; i != last; ++i) {
-        ForwardIt k = i;
-        for (ForwardIt j = std::next(i); j != last; ++j) {
-            if (comp(*j, *k) < 0) k = j;
-        }
-        std::swap(*i, *k);
+    for (; first != last; ++first) {
+        std::swap(*first, *std::min_element(first, last, comp));
     }
 }
 template <typename ForwardIt>
