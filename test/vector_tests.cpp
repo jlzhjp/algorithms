@@ -51,7 +51,6 @@ TEST(Vector, Assign) {
     v.assign(lst.begin(), lst.end());
     EXPECT_TRUE(std::equal(v.begin(), v.end(), lst.begin(), lst.end()));
 
-
     std::initializer_list<std::string> ilst = { "A", "B", "C"};
     v.assign(ilst.begin(), ilst.end());
     EXPECT_TRUE(std::equal(v.begin(), v.end(), ilst.begin(), ilst.end()));

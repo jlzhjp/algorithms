@@ -4,7 +4,7 @@
 
 namespace alg::test {
 
-TEST(Stack, Constructor_Overload1) {
+TEST(Stack, Constructor) {
     Stack<int> s1;
     EXPECT_EQ(0, s1.size());
 
@@ -78,7 +78,6 @@ TEST(Stack, Swap) {
     EXPECT_EQ("B", s2.pop());
     EXPECT_EQ("A", s2.pop());
 }
-
 TEST(Stack, Stress) {
     Stack<std::string> s;
     for (int i = 0; i <= 10000; ++i) {

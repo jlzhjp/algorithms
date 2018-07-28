@@ -20,7 +20,7 @@ class Stack {
     using value_type = typename container_type::value_type;
     using size_type = typename container_type::size_type;
     using reference = typename container_type::reference;
-    using const_reference = typename container_type::reference;
+    using const_reference = typename container_type::const_reference;
 
    public:
     explicit Stack() = default;
