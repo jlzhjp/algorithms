@@ -17,7 +17,7 @@ void insertion_sort(BidirectIt first, BidirectIt last, TComparer comp) {
         // 在内循环中将较大的元素向右移动而不总是交换两个元素
         auto tmp = std::move(*i);
         BidirectIt j = i;
-        for (; comp(tmp, *std::prev(j)); --j) {
+        for (; lt(tmp, *std::prev(j), comp); --j) {
             *j = std::move(*std::prev(j));
         }
         *j = std::move(tmp);
