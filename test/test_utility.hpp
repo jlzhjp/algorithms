@@ -29,14 +29,14 @@ std::string gen_content_str(InputIt first, InputIt last) {
     return result + "}";
 }
 // 生成 +-100 以内的随机数序列
-Vector<int> gen_random_seq(Vector<int>::size_type n) {
+template <typename OutputIt>
+void gen_random_seq(OutputIt first, OutputIt last) {
     Vector<int> result;
     std::random_device rand;
-    for (auto i = n; i != 0; --i) {
+    for (; first != last; ++first) {
         unsigned long s = rand() % 2, num = rand() % 100;
-        result.push_back(s == 0 ? -num : num);
-    }
-    return result;
+        *first = s == 0 ? -num : num;
+    };
 }
 }  // namespace alg::test
 

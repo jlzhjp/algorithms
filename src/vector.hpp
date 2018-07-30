@@ -21,8 +21,8 @@ class Vector {
     using const_pointer = typename alloc_traits::const_pointer;
     using difference_type = typename alloc_traits::difference_type;
     using size_type = typename alloc_traits::size_type;
-    using reference = T &;
-    using const_reference = const T &;
+    using reference = value_type &;
+    using const_reference = const value_type &;
     using iterator = pointer;
     using const_iterator = const_pointer;
     using reverse_iterator = std::reverse_iterator<iterator>;
@@ -146,7 +146,7 @@ Vector<V, A>::Vector(const Vector &rhs)
     std::uninitialized_copy_n(rhs._data, rhs._size, _data);
 }
 template <typename V, typename A>
-Vector<V, A>::Vector(Vector &&rhs) {
+inline Vector<V, A>::Vector(Vector &&rhs) {
     *this = std::forward<Vector>(rhs);
 }
 template <typename V, typename A>
@@ -238,12 +238,13 @@ void Vector<V, A>::emplace_back(TArgs &&... args) {
     emplace(end(), std::forward<TArgs>(args)...);
 }
 template <typename V, typename A>
-auto Vector<V, A>::insert(const_iterator pos, const value_type &val)
+inline auto Vector<V, A>::insert(const_iterator pos, const value_type &val)
     -> iterator {
     return emplace(pos, val);
 }
 template <typename V, typename A>
-auto Vector<V, A>::insert(const_iterator pos, value_type &&val) -> iterator {
+inline auto Vector<V, A>::insert(const_iterator pos, value_type &&val)
+    -> iterator {
     return emplace(pos, std::forward<value_type>(val));
 }
 template <typename V, typename A>
@@ -263,7 +264,7 @@ auto Vector<V, A>::insert(const_iterator pos,
     return iterator(p);
 }
 template <typename V, typename A>
-auto Vector<V, A>::erase(const_iterator pos) -> iterator {
+inline auto Vector<V, A>::erase(const_iterator pos) -> iterator {
     return erase(pos, pos + 1);
 }
 template <typename V, typename A>
@@ -313,51 +314,51 @@ void Vector<V, A>::swap(Vector &rhs) {
     std::swap(rhs._alloc, _alloc);
 }
 template <typename V, typename A>
-auto Vector<V, A>::begin() noexcept -> iterator {
+inline auto Vector<V, A>::begin() noexcept -> iterator {
     return _data;
 }
 template <typename V, typename A>
-auto Vector<V, A>::end() noexcept -> iterator {
+inline auto Vector<V, A>::end() noexcept -> iterator {
     return _data + _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::begin() const noexcept -> const_iterator {
+inline auto Vector<V, A>::begin() const noexcept -> const_iterator {
     return _data;
 }
 template <typename V, typename A>
-auto Vector<V, A>::end() const noexcept -> const_iterator {
+inline auto Vector<V, A>::end() const noexcept -> const_iterator {
     return _data + _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::cbegin() const -> const_iterator {
+inline auto Vector<V, A>::cbegin() const -> const_iterator {
     return begin();
 }
 template <typename V, typename A>
-auto Vector<V, A>::cend() const -> const_iterator {
+inline auto Vector<V, A>::cend() const -> const_iterator {
     return end();
 }
 template <typename V, typename A>
-auto Vector<V, A>::rbegin() noexcept -> reverse_iterator {
+inline auto Vector<V, A>::rbegin() noexcept -> reverse_iterator {
     return reverse_iterator(end());
 }
 template <typename V, typename A>
-auto Vector<V, A>::rend() noexcept -> reverse_iterator {
+inline auto Vector<V, A>::rend() noexcept -> reverse_iterator {
     return reverse_iterator(begin());
 }
 template <typename V, typename A>
-auto Vector<V, A>::rbegin() const noexcept -> const_reverse_iterator {
+inline auto Vector<V, A>::rbegin() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(end());
 }
 template <typename V, typename A>
-auto Vector<V, A>::rend() const noexcept -> const_reverse_iterator {
+inline auto Vector<V, A>::rend() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(begin());
 }
 template <typename V, typename A>
-auto Vector<V, A>::crbegin() const noexcept -> const_reverse_iterator {
+inline auto Vector<V, A>::crbegin() const noexcept -> const_reverse_iterator {
     return rbegin();
 }
 template <typename V, typename A>
-auto Vector<V, A>::crend() const noexcept -> const_reverse_iterator {
+inline auto Vector<V, A>::crend() const noexcept -> const_reverse_iterator {
     return rend();
 }
 template <typename V, typename A>
@@ -377,48 +378,48 @@ auto Vector<V, A>::at(size_type i) const -> const_reference {
     return _data[i];
 }
 template <typename V, typename A>
-auto Vector<V, A>::front() noexcept -> reference {
+inline auto Vector<V, A>::front() noexcept -> reference {
     return _data[0];
 }
 template <typename V, typename A>
-auto Vector<V, A>::front() const noexcept -> const_reference {
+inline auto Vector<V, A>::front() const noexcept -> const_reference {
     return _data[0];
 }
 template <typename V, typename A>
-auto Vector<V, A>::back() noexcept -> reference {
+inline auto Vector<V, A>::back() noexcept -> reference {
     return _data[_size - 1];
 }
 template <typename V, typename A>
-auto Vector<V, A>::back() const noexcept -> const_reference {
+inline auto Vector<V, A>::back() const noexcept -> const_reference {
     return _data[_size - 1];
 }
 template <typename V, typename A>
-auto Vector<V, A>::data() noexcept -> pointer {
+inline auto Vector<V, A>::data() noexcept -> pointer {
     return _data;
 }
 template <typename V, typename A>
-auto Vector<V, A>::data() const noexcept -> const_pointer {
+inline auto Vector<V, A>::data() const noexcept -> const_pointer {
     return _data;
 }
 template <typename V, typename A>
-bool Vector<V, A>::empty() const noexcept {
+inline bool Vector<V, A>::empty() const noexcept {
     return _size == 0;
 }
 template <typename V, typename A>
-auto Vector<V, A>::size() const noexcept -> size_type {
+inline auto Vector<V, A>::size() const noexcept -> size_type {
     return _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::capacity() const noexcept -> size_type {
+inline auto Vector<V, A>::capacity() const noexcept -> size_type {
     return _capacity;
 }
 template <typename V, typename A>
-auto Vector<V, A>::max_size() const noexcept -> size_type {
+inline auto Vector<V, A>::max_size() const noexcept -> size_type {
     return std::min(alloc_traits::max_size(_alloc),
                     std::numeric_limits<size_type>::max());
 }
 template <typename V, typename A>
-auto Vector<V, A>::get_allocator() const noexcept -> allocator_type {
+inline auto Vector<V, A>::get_allocator() const noexcept -> allocator_type {
     return _alloc;
 }
 template <typename V, typename A>
@@ -426,38 +427,38 @@ bool Vector<V, A>::full() const noexcept {
     return _capacity == _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::begin_ptr() noexcept -> pointer {
+inline auto Vector<V, A>::begin_ptr() noexcept -> pointer {
     return _data;
 }
 template <typename V, typename A>
-auto Vector<V, A>::end_ptr() noexcept -> pointer {
+inline auto Vector<V, A>::end_ptr() noexcept -> pointer {
     return _data + _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::begin_ptr() const noexcept -> pointer {
+inline auto Vector<V, A>::begin_ptr() const noexcept -> pointer {
     return _data;
 }
 template <typename V, typename A>
-auto Vector<V, A>::end_ptr() const noexcept -> pointer {
+inline auto Vector<V, A>::end_ptr() const noexcept -> pointer {
     return _data + _size;
 }
 template <typename V, typename A>
-auto Vector<V, A>::allocate(size_type n) -> value_type * {
+inline auto Vector<V, A>::allocate(size_type n) -> value_type * {
     value_type *p = alloc_traits::allocate(_alloc, n);
     assert(p != nullptr);
     return p;
 }
 template <typename V, typename A>
-void Vector<V, A>::deallocate(value_type *p, size_type n) noexcept {
+inline void Vector<V, A>::deallocate(value_type *p, size_type n) noexcept {
     alloc_traits::deallocate(_alloc, p, n);
 }
 template <typename V, typename A>
 template <typename... TArgs>
-void Vector<V, A>::construct(value_type *p, TArgs &&... args) {
+inline void Vector<V, A>::construct(value_type *p, TArgs &&... args) {
     alloc_traits::construct(_alloc, p, std::forward<TArgs>(args)...);
 }
 template <typename V, typename A>
-void Vector<V, A>::destroy(value_type *p) noexcept {
+inline void Vector<V, A>::destroy(value_type *p) noexcept {
     alloc_traits::destroy(_alloc, p);
 }
 template <typename V, typename A>
@@ -532,7 +533,7 @@ inline bool operator>=(const Vector<V, A> &lhs, const Vector<V, A> &rhs) {
 
 namespace std {
 template <typename T>
-void swap(alg::Vector<T> &lhs, alg::Vector<T> &rhs) {
+inline void swap(alg::Vector<T> &lhs, alg::Vector<T> &rhs) {
     lhs.swap(rhs);
 }
 }  // namespace std
