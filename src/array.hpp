@@ -9,7 +9,6 @@ namespace alg {
 
 template <typename T, size_t N>
 struct Array {
-   public:
     using value_type = T;
     using size_type = size_t;
     using difference_type = ptrdiff_t;

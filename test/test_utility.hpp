@@ -6,7 +6,7 @@
 #include <random>
 #include <string>
 
-#include "../src/vector.hpp"
+#include "../src/utility.hpp"
 
 namespace alg::test {
 
@@ -18,6 +18,13 @@ bool is_sorted(ForwardIt first, ForwardIt last, TComparer comp) {
     }
     return true;
 }
+template <typename ForwardIt>
+bool is_sorted(ForwardIt first, ForwardIt last) {
+    return is_sorted(
+        first, last,
+        compare_asc<typename std::iterator_traits<ForwardIt>::value_type>);
+}
+
 template <typename InputIt>
 std::string gen_content_str(InputIt first, InputIt last) {
     std::string result = "{ ";
@@ -31,7 +38,6 @@ std::string gen_content_str(InputIt first, InputIt last) {
 // 生成 +-100 以内的随机数序列
 template <typename OutputIt>
 void gen_random_seq(OutputIt first, OutputIt last) {
-    Vector<int> result;
     std::random_device rand;
     for (; first != last; ++first) {
         unsigned long s = rand() % 2, num = rand() % 100;

@@ -1,5 +1,5 @@
-#ifndef __INSERTION_SORT__
-#define __INSERTION_SORT__
+#ifndef __INSERTION_SORT_HPP__
+#define __INSERTION_SORT_HPP__
 
 #include <algorithm>
 #include <iterator>
