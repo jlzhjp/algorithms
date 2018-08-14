@@ -1,6 +1,7 @@
 #ifndef __ARRAY_HPP__
 #define __ARRAY_HPP__
 
+#include <cassert>
 #include <cstddef>
 #include <iterator>
 #include <memory>

@@ -4,6 +4,7 @@
 #include "../src/sort/insertion_sort.hpp"
 #include "../src/sort/selection_sort.hpp"
 #include "../src/sort/shell_sort.hpp"
+#include "../src/sort/merge_sort.hpp"
 #include "./test_utility.hpp"
 
 namespace alg::test {
@@ -50,5 +51,18 @@ TEST(ShellSort, Desc) {
     EXPECT_TRUE(is_sorted(arr.begin(), arr.end(), compare_desc<int>))
         << gen_content_str(arr.begin(), arr.end());
 }
-
+TEST(MergeSort, Asc) {
+    Array<int, 9> arr;
+    gen_random_seq(arr.begin(), arr.end());
+    merge_sort(arr);
+    EXPECT_TRUE(is_sorted(arr.begin(), arr.end()))
+        << gen_content_str(arr.begin(), arr.end());
+}
+TEST(MergeSort, Desc) {
+    Array<int, 9> arr;
+    gen_random_seq(arr.begin(), arr.end());
+    merge_sort(arr, compare_desc<int>);
+    EXPECT_TRUE(is_sorted(arr.begin(), arr.end(), compare_desc<int>))
+        << gen_content_str(arr.begin(), arr.end());
+}
 }  // namespace alg::test
