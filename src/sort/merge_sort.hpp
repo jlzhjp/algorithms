@@ -1,5 +1,5 @@
-#ifndef __MERGE_SORT__
-#define __MERGE_SORT__
+#ifndef __MERGE_SORT_HPP__
+#define __MERGE_SORT_HPP__
 
 #include <memory>
 

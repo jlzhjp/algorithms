@@ -22,8 +22,8 @@ struct Array {
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    reference operator[](size_type i) noexcept;
-    const_reference operator[](size_type i) const noexcept;
+    constexpr reference operator[](size_type i) noexcept;
+    constexpr const_reference operator[](size_type i) const noexcept;
 
     void fill(const value_type &val);
     void swap(Array &other);
@@ -41,16 +41,16 @@ struct Array {
     constexpr const_reverse_iterator crbegin() const noexcept;
     constexpr const_reverse_iterator crend() const noexcept;
 
-    reference at(size_type i);
-    const_reference at(size_type i) const;
-    reference back() noexcept;
-    const_reference back() const noexcept;
-    reference front() noexcept;
-    const_reference front() const noexcept;
+    constexpr reference at(size_type i);
+    constexpr const_reference at(size_type i) const;
+    constexpr reference back() noexcept;
+    constexpr const_reference back() const noexcept;
+    constexpr reference front() noexcept;
+    constexpr const_reference front() const noexcept;
 
-    pointer data() noexcept;
-    const_pointer data() const noexcept;
-    size_type size() const noexcept;
+    constexpr pointer data() noexcept;
+    constexpr const_pointer data() const noexcept;
+    constexpr size_type size() const noexcept;
     constexpr bool empty() const noexcept;
     constexpr size_type max_size() const noexcept;
 
@@ -58,12 +58,12 @@ struct Array {
 };
 
 template <typename T, size_t N>
-inline auto Array<T, N>::operator[](size_type i) noexcept -> reference {
+constexpr auto Array<T, N>::operator[](size_type i) noexcept -> reference {
     assert(i < size());
     return _data[i];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::operator[](size_type i) const noexcept
+constexpr auto Array<T, N>::operator[](size_type i) const noexcept
     -> const_reference {
     assert(i < size());
     return _data[i];
@@ -127,7 +127,7 @@ constexpr auto Array<T, N>::crend() const noexcept -> const_reverse_iterator {
     return rend();
 }
 template <typename T, size_t N>
-auto Array<T, N>::at(size_type i) -> reference {
+constexpr auto Array<T, N>::at(size_type i) -> reference {
     if (i < 0 && i >= size()) {
         throw std::out_of_range("Index out of range: " + std::to_string(i) +
                                 ".");
@@ -135,7 +135,7 @@ auto Array<T, N>::at(size_type i) -> reference {
     return _data[i];
 }
 template <typename T, size_t N>
-auto Array<T, N>::at(size_type i) const -> const_reference {
+constexpr auto Array<T, N>::at(size_type i) const -> const_reference {
     if (i < 0 && i >= size()) {
         throw std::out_of_range("Index out of range: " + std::to_string(i) +
                                 ".");
@@ -143,27 +143,27 @@ auto Array<T, N>::at(size_type i) const -> const_reference {
     return _data[i];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::front() noexcept -> reference {
+constexpr auto Array<T, N>::front() noexcept -> reference {
     return _data[0];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::front() const noexcept -> const_reference {
+constexpr auto Array<T, N>::front() const noexcept -> const_reference {
     return _data[0];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::back() noexcept -> reference {
+constexpr auto Array<T, N>::back() noexcept -> reference {
     return _data[size() - 1];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::back() const noexcept -> const_reference {
+constexpr auto Array<T, N>::back() const noexcept -> const_reference {
     return _data[size() - 1];
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::data() noexcept -> pointer {
+constexpr auto Array<T, N>::data() noexcept -> pointer {
     return _data;
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::data() const noexcept -> const_pointer {
+constexpr auto Array<T, N>::data() const noexcept -> const_pointer {
     return _data;
 }
 template <typename T, size_t N>
@@ -171,7 +171,7 @@ constexpr bool Array<T, N>::empty() const noexcept {
     return N == 0;
 }
 template <typename T, size_t N>
-inline auto Array<T, N>::size() const noexcept -> size_type {
+constexpr auto Array<T, N>::size() const noexcept -> size_type {
     return std::distance(begin(), end());
 }
 template <typename T, size_t N>
@@ -180,30 +180,30 @@ constexpr auto Array<T, N>::max_size() const noexcept -> size_type {
 }
 
 template <typename T, size_t N>
-inline bool operator==(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator==(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return lhs.size() == rhs.size() &&
            std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 template <typename T, size_t N>
-inline bool operator!=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator!=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
                                         rhs.end());
 }
 template <typename T, size_t N>
-inline bool operator<(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator<(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
                                         rhs.end());
 }
 template <typename T, size_t N>
-inline bool operator>(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator>(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return rhs < lhs;
 }
 template <typename T, size_t N>
-inline bool operator<=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator<=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return !(lhs > rhs);
 }
 template <typename T, size_t N>
-inline bool operator>=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+constexpr bool operator>=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return !(lhs < rhs);
 }
 
