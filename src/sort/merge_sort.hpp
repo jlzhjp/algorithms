@@ -7,9 +7,10 @@
 #include "../utility.hpp"
 
 namespace alg {
+
 template <typename T, size_t N, typename TComparer>
-void _merge(Array<T, N> &arr, size_t lo, size_t mid, size_t hi,
-            Array<T, N> &aux, TComparer comp) {
+void __merge(Array<T, N> &arr, size_t lo, size_t mid, size_t hi,
+             Array<T, N> &aux, TComparer comp) {
     size_t i = lo, j = mid + 1;
 
     std::uninitialized_move(arr.begin(), arr.end(), aux.begin());
@@ -25,24 +26,25 @@ void _merge(Array<T, N> &arr, size_t lo, size_t mid, size_t hi,
     }
 };
 template <typename T, size_t N, typename TComparer>
-void _merge_sort(Array<T, N> &arr, size_t lo, size_t hi, Array<T, N> &aux,
-                 TComparer comp) {
+void __merge_sort(Array<T, N> &arr, size_t lo, size_t hi, Array<T, N> &aux,
+                  TComparer comp) {
     if (hi <= lo) return;
     size_t mid = lo + (hi - lo) / 2;
-    _merge_sort(arr, lo, mid, aux, comp);      // 将左边排序
-    _merge_sort(arr, mid + 1, hi, aux, comp);  // 将右边排序
-    if (gt(arr[mid], arr[mid + 1], comp)) _merge(arr, lo, mid, hi, aux, comp);
+    __merge_sort(arr, lo, mid, aux, comp);      // 将左边排序
+    __merge_sort(arr, mid + 1, hi, aux, comp);  // 将右边排序
+    if (gt(arr[mid], arr[mid + 1], comp)) __merge(arr, lo, mid, hi, aux, comp);
 }
 template <typename T, size_t N, typename TComparer>
 void merge_sort(Array<T, N> &arr, TComparer comp) {
     if constexpr (N <= 1) return;
     Array<T, N> aux;
-    _merge_sort(arr, 0, N - 1, aux, comp);
+    __merge_sort(arr, 0, N - 1, aux, comp);
 }
 template <typename T, size_t N>
 void merge_sort(Array<T, N> &arr) {
     merge_sort(arr, compare_asc<T>);
 }
+
 }  // namespace alg
 
 #endif

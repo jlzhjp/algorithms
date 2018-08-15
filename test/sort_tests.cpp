@@ -3,6 +3,7 @@
 #include "../src/array.hpp"
 #include "../src/sort/insertion_sort.hpp"
 #include "../src/sort/merge_sort.hpp"
+#include "../src/sort/quick_sort.hpp"
 #include "../src/sort/selection_sort.hpp"
 #include "../src/sort/shell_sort.hpp"
 #include "./test_utility.hpp"
@@ -65,4 +66,19 @@ TEST(MergeSort, Desc) {
     EXPECT_TRUE(is_sorted(arr.begin(), arr.end(), compare_desc<int>))
         << gen_content_str(arr.begin(), arr.end());
 }
+TEST(QuickSort, Asc) {
+    Array<int, 9> arr;
+    gen_random_seq(arr.begin(), arr.end());
+    quick_sort(arr.begin(), arr.end());
+    EXPECT_TRUE(is_sorted(arr.begin(), arr.end()))
+        << gen_content_str(arr.begin(), arr.end());
+}
+TEST(QuickSort, Desc) {
+    Array<int, 9> arr;
+    gen_random_seq(arr.begin(), arr.end());
+    quick_sort(arr.begin(), arr.end(), compare_desc<int>);
+    EXPECT_TRUE(is_sorted(arr.begin(), arr.end(), compare_desc<int>))
+        << gen_content_str(arr.begin(), arr.end());
+}
+
 }  // namespace alg::test
