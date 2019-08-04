@@ -1,5 +1,4 @@
-#ifndef __INSERTION_SORT_HPP__
-#define __INSERTION_SORT_HPP__
+#pragma once
 
 #include <algorithm>
 #include <iterator>
@@ -31,5 +30,3 @@ inline void insertion_sort(BidIt first, BidIt last) {
 }
 
 }  // namespace alg
-
-#endif

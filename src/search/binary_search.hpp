@@ -1,5 +1,4 @@
-#ifndef __BINARY_SEARCH_HPP__
-#define __BINARY_SEARCH_HPP__
+#pragma once
 
 #include <cassert>
 #include <iostream>
@@ -24,5 +23,3 @@ RandomIt binary_search(RandomIt first, RandomIt last, const T &key) {
 }
 
 }  // namespace alg
-
-#endif

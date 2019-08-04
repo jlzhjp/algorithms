@@ -1,5 +1,4 @@
-#ifndef __SELECTION_SORT_HPP__
-#define __SELECTION_SORT_HPP__
+#pragma once
 
 #include <algorithm>
 #include <iterator>
@@ -22,5 +21,3 @@ inline void selection_sort(ForwardIt first, ForwardIt last) {
 }
 
 }  // namespace alg
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __SHELL_SORT_HPP__
-#define __SHELL_SORT_HPP__
+#pragma once
 
 #include <cassert>
 #include <iterator>
@@ -30,5 +29,3 @@ inline void shell_sort(Array<T, N>& arr) {
 }
 
 }  // namespace alg
-
-#endif

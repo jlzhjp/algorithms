@@ -1,5 +1,4 @@
-#ifndef __UTILITY_HPP__
-#define __UTILITY_HPP__
+#pragma once
 
 namespace alg {
 
@@ -79,4 +78,3 @@ inline bool ge(const T &lhs, const T &rhs) {
 
 }  // namespace alg
 
-#endif

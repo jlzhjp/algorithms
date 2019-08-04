@@ -1,5 +1,4 @@
-#ifndef __QUICK_SORT_HPP__
-#define __QUICK_SORT_HPP__
+#pragma once
 
 #include <algorithm>
 #include <chrono>
@@ -49,5 +48,3 @@ inline void quick_sort(RandomIt beg, RandomIt end) {
         compare_asc<typename std::iterator_traits<RandomIt>::value_type>);
 }
 }  // namespace alg
-
-#endif

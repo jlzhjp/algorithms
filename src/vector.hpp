@@ -1,5 +1,4 @@
-#ifndef __VECTOR_HPP__
-#define __VECTOR_HPP__
+#pragma once
 
 #include <cassert>
 #include <initializer_list>
@@ -538,4 +537,3 @@ inline void swap(alg::Vector<T> &lhs, alg::Vector<T> &rhs) {
 }
 }  // namespace std
 
-#endif

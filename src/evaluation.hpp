@@ -1,5 +1,4 @@
-#ifndef __EVALUATION_HPP__
-#define __EVALUATION_HPP__
+#pragma once
 
 #include <cmath>
 #include <sstream>
@@ -49,4 +48,3 @@ double evaluate(const std::string &expr) {
 
 }  // namespace alg
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef __ARRAY_HPP__
-#define __ARRAY_HPP__
+#pragma once
 
 #include <cassert>
 #include <cstddef>
@@ -217,4 +216,3 @@ inline void swap(alg::Array<T, N> &x, alg::Array<T, N> &y) {
 }
 
 }  // namespace std
-#endif

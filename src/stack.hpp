@@ -1,5 +1,4 @@
-#ifndef __STACK_HPP__
-#define __STACK_HPP__
+#pragma once
 
 #include <cassert>
 #include <cstddef>
@@ -98,4 +97,3 @@ void swap(alg::Stack<V, C> &lhs, alg::Stack<V, C> &rhs) {
 
 }  // namespace std
 
-#endif

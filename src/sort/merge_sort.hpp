@@ -1,5 +1,4 @@
-#ifndef __MERGE_SORT_HPP__
-#define __MERGE_SORT_HPP__
+#pragma once
 
 #include <memory>
 
@@ -46,5 +45,3 @@ void merge_sort(Array<T, N> &arr) {
 }
 
 }  // namespace alg
-
-#endif

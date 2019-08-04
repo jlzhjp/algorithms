@@ -47,11 +47,11 @@ TEST(Vector, Assign) {
     EXPECT_EQ(v.size(), 30);
     for (auto val : v) EXPECT_EQ("A", val);
 
-    std::list<std::string> lst = { "A", "B", "C"};
+    std::list<std::string> lst = {"A", "B", "C"};
     v.assign(lst.begin(), lst.end());
     EXPECT_TRUE(std::equal(v.begin(), v.end(), lst.begin(), lst.end()));
 
-    std::initializer_list<std::string> ilst = { "A", "B", "C"};
+    std::initializer_list<std::string> ilst = {"A", "B", "C"};
     v.assign(ilst.begin(), ilst.end());
     EXPECT_TRUE(std::equal(v.begin(), v.end(), ilst.begin(), ilst.end()));
 }
@@ -100,7 +100,7 @@ TEST(Vector, Resize) {
     EXPECT_EQ(expected, v);
 }
 TEST(Vector, Reserve) {
-    Vector<std::string> v = { "A", "B" };
+    Vector<std::string> v = {"A", "B"};
     auto cap = v.capacity();
     v.reserve(0);
     EXPECT_EQ(cap, v.capacity());
@@ -108,16 +108,16 @@ TEST(Vector, Reserve) {
     EXPECT_EQ(100, v.capacity());
 }
 TEST(Vector, Swap) {
-    Vector<std::string> v1 =  { "A", "B", "C" };
-    Vector<std::string> v2 =  { "D", "E" };
+    Vector<std::string> v1 = {"A", "B", "C"};
+    Vector<std::string> v2 = {"D", "E"};
     v1.swap(v2);
-    Vector<std::string> v1_expected = { "D", "E" };
-    Vector<std::string> v2_expected =  { "A", "B", "C" };
+    Vector<std::string> v1_expected = {"D", "E"};
+    Vector<std::string> v2_expected = {"A", "B", "C"};
     EXPECT_EQ(v1_expected, v1);
     EXPECT_EQ(v2_expected, v2);
 }
 TEST(Vector, Stress) {
-    Vector<std::string> v(0);    
+    Vector<std::string> v(0);
     for (int i = 0; i <= 10000; ++i) {
         v.push_back(std::to_string(i));
     }
