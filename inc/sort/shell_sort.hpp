@@ -3,8 +3,8 @@
 #include <cassert>
 #include <iterator>
 
-#include "../array.hpp"
-#include "../utility.hpp"
+#include "array.hpp"
+#include "utility.hpp"
 
 namespace alg {
 

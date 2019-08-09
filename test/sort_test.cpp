@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "../src/array.hpp"
-#include "../src/sort/insertion_sort.hpp"
-#include "../src/sort/merge_sort.hpp"
-#include "../src/sort/quick_sort.hpp"
-#include "../src/sort/selection_sort.hpp"
-#include "../src/sort/shell_sort.hpp"
-#include "./test_utility.hpp"
+#include "array.hpp"
+#include "sort/insertion_sort.hpp"
+#include "sort/merge_sort.hpp"
+#include "sort/quick_sort.hpp"
+#include "sort/selection_sort.hpp"
+#include "sort/shell_sort.hpp"
+#include "test_utility.hpp"
 
 namespace alg::test {
 

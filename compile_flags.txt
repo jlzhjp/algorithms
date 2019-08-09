@@ -1,3 +1,4 @@
 -std=c++1z
 -xc++
 -Wall
+-I./inc

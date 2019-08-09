@@ -1,14 +1,12 @@
-#pragma once
+#include "evaluation.hpp"
 
 #include <cmath>
 #include <sstream>
-#include <string>
 
 #include "stack.hpp"
 
 namespace alg {
 
-// Dijkstra 双栈表达式求值算法
 double evaluate(const std::string &expr) {
     std::istringstream t_stream(expr);
     Stack<std::string> ops;
@@ -45,6 +43,4 @@ double evaluate(const std::string &expr) {
     }
     return vals.pop();
 }
-
 }  // namespace alg
-

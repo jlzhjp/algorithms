@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/utility.hpp"
+#include "utility.hpp"
 
 namespace alg::test {
 

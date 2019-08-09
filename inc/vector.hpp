@@ -10,10 +10,10 @@ namespace alg {
 
 template <typename T, typename TAlloc = std::allocator<T>>
 class Vector {
-   private:
+private:
     using alloc_traits = std::allocator_traits<TAlloc>;
 
-   public:
+public:
     using allocator_type = TAlloc;
     using value_type = typename alloc_traits::value_type;
     using pointer = typename alloc_traits::pointer;
@@ -27,7 +27,7 @@ class Vector {
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-   public:
+public:
     explicit Vector();
     explicit Vector(size_type initcap);
     Vector(std::initializer_list<value_type> vals);
@@ -35,13 +35,13 @@ class Vector {
     Vector(Vector &&rhs);
     ~Vector();
 
-   public:
+public:
     Vector &operator=(const Vector &rhs);
     Vector &operator=(Vector &&rhs);
     reference operator[](size_type n);
     const_reference operator[](size_type n) const;
 
-   public:
+public:
     void assign(size_type count, const value_type &val);
     template <typename InputIter>
     void assign(InputIter first, InputIter last);
@@ -66,7 +66,7 @@ class Vector {
     void shrink_to_fit();
     void swap(Vector &rhs);
 
-   public:
+public:
     iterator begin() noexcept;
     iterator end() noexcept;
     const_iterator begin() const noexcept;
@@ -95,7 +95,7 @@ class Vector {
     size_type max_size() const noexcept;
     allocator_type get_allocator() const noexcept;
 
-   private:
+private:
     bool full() const noexcept;
     pointer begin_ptr() noexcept;
     pointer end_ptr() noexcept;
@@ -113,10 +113,10 @@ class Vector {
     pointer alloc_block_n(const_iterator pos, size_type n);
     void modify_capacity(size_type n);
 
-   private:
+private:
     static constexpr size_type _kSpareSpace = 16;
 
-   private:
+private:
     bool _disposed = false;
     size_type _size = 0;
     size_type _capacity = 0;
@@ -536,4 +536,3 @@ inline void swap(alg::Vector<T> &lhs, alg::Vector<T> &rhs) {
     lhs.swap(rhs);
 }
 }  // namespace std
-

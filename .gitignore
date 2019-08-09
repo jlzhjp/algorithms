@@ -1,6 +1,7 @@
+build/
+.vscode/
 a.out
 test.cpp
-.vscode/
 *.pch
 *.tu
 *.gch

@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
+#include "evaluation.hpp"
 
-#include "../src/evaluation.hpp"
+#include <cmath>
 
 namespace alg::test {
 

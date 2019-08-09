@@ -1,8 +1,9 @@
+#include <gtest/gtest.h>
+#include "search/binary_search.hpp"
+
 #include <iostream>
 
-#include <gtest/gtest.h>
-
-#include "../src/search/binary_search.hpp"
+#include "vector.hpp"
 
 namespace alg::test {
 

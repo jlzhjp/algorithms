@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-
-#include "../src/stack.hpp"
+#include "stack.hpp"
 
 namespace alg::test {
 

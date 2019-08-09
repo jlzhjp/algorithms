@@ -1,12 +1,11 @@
-#ifndef __TEST_UTILITY_HPP__
-#define __TEST_UTILITY_HPP__
+#pragma once
 
 #include <algorithm>
 #include <iterator>
 #include <random>
 #include <string>
 
-#include "../src/utility.hpp"
+#include "utility.hpp"
 
 namespace alg::test {
 
@@ -45,5 +44,3 @@ void gen_random_seq(OutputIt first, OutputIt last) {
     };
 }
 }  // namespace alg::test
-
-#endif

@@ -1,9 +1,8 @@
+#include <gtest/gtest.h>
+#include "vector.hpp"
+
 #include <iostream>
 #include <list>
-
-#include <gtest/gtest.h>
-
-#include "../src/vector.hpp"
 
 namespace alg::test {
 
@@ -45,7 +44,9 @@ TEST(Vector, Assign) {
 
     v.assign(30, "A");
     EXPECT_EQ(v.size(), 30);
-    for (auto val : v) EXPECT_EQ("A", val);
+    for (auto val : v) {
+        EXPECT_EQ("A", val);
+    }
 
     std::list<std::string> lst = {"A", "B", "C"};
     v.assign(lst.begin(), lst.end());

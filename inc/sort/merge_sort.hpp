@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "../array.hpp"
-#include "../utility.hpp"
+#include "array.hpp"
+#include "utility.hpp"
 
 namespace alg {
 
@@ -11,7 +11,6 @@ template <typename T, size_t N, typename TComparer>
 void __merge(Array<T, N> &arr, size_t lo, size_t mid, size_t hi,
              Array<T, N> &aux, TComparer comp) {
     size_t i = lo, j = mid + 1;
-
     std::uninitialized_move(arr.begin(), arr.end(), aux.begin());
     for (size_t k = lo; k <= hi; ++k) {
         if (i > mid)

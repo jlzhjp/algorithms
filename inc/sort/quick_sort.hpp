@@ -5,8 +5,7 @@
 #include <cstddef>
 #include <iterator>
 #include <random>
-#include "../array.hpp"
-#include "../utility.hpp"
+#include "utility.hpp"
 
 namespace alg {
 

@@ -13,7 +13,7 @@ namespace alg {
 
 template <typename T, typename TContainer = Vector<T>>
 class Stack {
-   public:
+public:
     using container_type = TContainer;
     using allocator_type = typename container_type::allocator_type;
     using value_type = typename container_type::value_type;
@@ -21,7 +21,7 @@ class Stack {
     using reference = typename container_type::reference;
     using const_reference = typename container_type::const_reference;
 
-   public:
+public:
     explicit Stack() = default;
     explicit Stack(container_type &container) : _container(container) {}
     explicit Stack(container_type &&container)
@@ -30,11 +30,11 @@ class Stack {
     Stack(Stack &) = default;
     Stack(Stack &&) = default;
 
-   public:
+public:
     Stack &operator=(Stack &) = default;
     Stack &operator=(Stack &&) = default;
 
-   public:
+public:
     value_type pop() {
         value_type result = _container.back();
         _container.pop_back();
@@ -46,14 +46,14 @@ class Stack {
     }
     void swap(Stack &rhs) { _container.swap(rhs._container); }
 
-   public:
+public:
     bool empty() const { return _container.empty(); }
     value_type &top() noexcept { return _container.back(); }
     const value_type &top() const noexcept { return _container.back(); }
     size_type size() const { return _container.size(); }
     size_type capacity() { return _container.capacity(); }
 
-   private:
+private:
     container_type _container;
 
     template <typename V, typename C>
@@ -96,4 +96,3 @@ void swap(alg::Stack<V, C> &lhs, alg::Stack<V, C> &rhs) {
 }
 
 }  // namespace std
-

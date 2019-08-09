@@ -4,7 +4,7 @@
 #include <iterator>
 #include <utility>
 
-#include "../utility.hpp"
+#include "utility.hpp"
 
 namespace alg {
 
