@@ -5,7 +5,7 @@ G = \033[0;32m
 B = \033[0;34m
 Y = \033[1;33m
 RC = \033[0m
-ECHO_SUCCESS = echo -e "> $(G)Success$(RC)."
+ECHO_OK = echo -e "> $(G)OK$(RC)."
 
 ROOT = .
 CXX = clang++
@@ -38,14 +38,14 @@ $(SHARED_LIB): $(OBJ_FILES)
 	@echo -e "$(B)Linking: $(G)$^$(RC) -> $(G)$@$(RC)..."
 	@$(MK_BIN_DIR)
 	@$(CXX) -shared -fPIC $^ -o $@
-	@$(ECHO_SUCCESS)
+	@$(ECHO_OK)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo -e "$(B)Building: $(G)$<$(RC) -> $(G)$@$(RC)..."
 	@$(MK_OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)
 	@$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@
-	@$(ECHO_SUCCESS)
+	@$(ECHO_OK)
 
 $(TEST_EXE): $(SHARED_LIB)
 	@$(MK_BIN_DIR)
@@ -71,4 +71,4 @@ runtest: $(TEST_EXE)
 clean:
 	@echo -e "$(B)Cleaning...$(RC)"
 	@rm -r $(BUILD_DIR)
-	@$(ECHO_SUCCESS)
+	@$(ECHO_OK)

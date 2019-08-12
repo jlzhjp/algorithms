@@ -53,131 +53,107 @@ struct Array {
     constexpr bool empty() const noexcept;
     constexpr size_type max_size() const noexcept;
 
+private:
     value_type _data[N == 0 ? 1 : N];
 };
 
-template <typename T, size_t N>
-constexpr auto Array<T, N>::operator[](size_type i) noexcept -> reference {
-    assert(i < size());
+#define IMPL(declaration...)        \
+    template <typename T, size_t N> \
+    declaration Array<T, N>
+
+IMPL(constexpr auto)::operator[](size_type i) noexcept -> reference {
+    assert(0 <= i && i < size());
     return _data[i];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::operator[](size_type i) const noexcept
-    -> const_reference {
-    assert(i < size());
+IMPL(constexpr auto)::operator[](size_type i) const noexcept -> const_reference {
+    assert(0 <= i && i < size());
     return _data[i];
 }
-template <typename T, size_t N>
-inline void Array<T, N>::fill(const value_type &val) {
+IMPL(inline void)::fill(const value_type &val) {
     std::uninitialized_fill(begin(), end(), val);
 }
-template <typename T, size_t N>
-void Array<T, N>::swap(Array &other) {
+IMPL(void)::swap(Array &other) {
     for (size_type i = 0; i != size(); ++i) {
         std::swap(_data[i], other[i]);
     }
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::begin() noexcept -> iterator {
+IMPL(constexpr auto)::begin() noexcept -> iterator {
     return _data;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::end() noexcept -> iterator {
+IMPL(constexpr auto)::end() noexcept -> iterator {
     return _data + N;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::begin() const noexcept -> const_iterator {
+IMPL(constexpr auto)::begin() const noexcept -> const_iterator {
     return _data;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::end() const noexcept -> const_iterator {
+IMPL(constexpr auto)::end() const noexcept -> const_iterator {
     return _data + N;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::cbegin() const -> const_iterator {
+IMPL(constexpr auto)::cbegin() const -> const_iterator {
     return begin();
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::cend() const -> const_iterator {
+IMPL(constexpr auto)::cend() const -> const_iterator {
     return end();
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::rbegin() noexcept -> reverse_iterator {
+IMPL(constexpr auto)::rbegin() noexcept -> reverse_iterator {
     return reverse_iterator(end());
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::rend() noexcept -> reverse_iterator {
+IMPL(constexpr auto)::rend() noexcept -> reverse_iterator {
     return reverse_iterator(begin());
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::rbegin() const noexcept -> const_reverse_iterator {
+IMPL(constexpr auto)::rbegin() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(end());
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::rend() const noexcept -> const_reverse_iterator {
+IMPL(constexpr auto)::rend() const noexcept -> const_reverse_iterator {
     return const_reverse_iterator(begin());
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::crbegin() const noexcept -> const_reverse_iterator {
+IMPL(constexpr auto)::crbegin() const noexcept -> const_reverse_iterator {
     return rbegin();
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::crend() const noexcept -> const_reverse_iterator {
+IMPL(constexpr auto)::crend() const noexcept -> const_reverse_iterator {
     return rend();
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::at(size_type i) -> reference {
-    if (i < 0 && i >= size()) {
+IMPL(constexpr auto)::at(size_type i) -> reference {
+    if (i < 0 || i >= size()) {
         throw std::out_of_range("Index out of range: " + std::to_string(i) +
                                 ".");
     }
     return _data[i];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::at(size_type i) const -> const_reference {
-    if (i < 0 && i >= size()) {
+IMPL(constexpr auto)::at(size_type i) const -> const_reference {
+    if (i < 0 || i >= size()) {
         throw std::out_of_range("Index out of range: " + std::to_string(i) +
                                 ".");
     }
     return _data[i];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::front() noexcept -> reference {
+IMPL(constexpr auto)::front() noexcept -> reference {
     return _data[0];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::front() const noexcept -> const_reference {
+IMPL(constexpr auto)::front() const noexcept -> const_reference {
     return _data[0];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::back() noexcept -> reference {
+IMPL(constexpr auto)::back() noexcept -> reference {
     return _data[size() - 1];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::back() const noexcept -> const_reference {
+IMPL(constexpr auto)::back() const noexcept -> const_reference {
     return _data[size() - 1];
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::data() noexcept -> pointer {
+IMPL(constexpr auto)::data() noexcept -> pointer {
     return _data;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::data() const noexcept -> const_pointer {
+IMPL(constexpr auto)::data() const noexcept -> const_pointer {
     return _data;
 }
-template <typename T, size_t N>
-constexpr bool Array<T, N>::empty() const noexcept {
+IMPL(constexpr bool)::empty() const noexcept {
     return N == 0;
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::size() const noexcept -> size_type {
+IMPL(constexpr auto)::size() const noexcept -> size_type {
     return std::distance(begin(), end());
 }
-template <typename T, size_t N>
-constexpr auto Array<T, N>::max_size() const noexcept -> size_type {
+IMPL(constexpr auto)::max_size() const noexcept -> size_type {
     return N;
 }
-
 template <typename T, size_t N>
 inline bool operator==(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return lhs.size() == rhs.size() &&
@@ -210,5 +186,3 @@ inline void swap(alg::Array<T, N> &x, alg::Array<T, N> &y) {
     x.swap(y);
 }
 }  // namespace alg
-
-

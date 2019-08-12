@@ -88,15 +88,13 @@ public:
     allocator_type get_allocator() const noexcept;
 
 protected:
-    void ensure_capacity_enough(size_type addition);
-    void change_capacity(size_type n);
-
-private:
     pointer allocate(size_type n);
     void deallocate(pointer p, size_type n) noexcept;
     template <typename... TArgs>
     void construct(pointer p, TArgs &&... args);
     void destroy(pointer p) noexcept;
+    void ensure_capacity_enough(size_type n);
+    void change_capacity(size_type n);
 
 private:
     static constexpr size_type SPARE_SPACE = 16;
@@ -120,7 +118,7 @@ IMPL(inline auto)::allocate(size_type n) -> pointer {
 IMPL(inline void)::deallocate(pointer p, size_type n) noexcept {
     alloc_traits::deallocate(_alloc, p, n);
 }
-IMPL(template <typename... TArgs> void)::construct(pointer p,
+IMPL(template <typename... TArgs> inline void)::construct(pointer p,
                                                    TArgs &&... args) {
     alloc_traits::construct(_alloc, p, std::forward<TArgs>(args)...);
 }
@@ -140,9 +138,9 @@ IMPL(void)::reserve(size_type n) {
     }
 }
 IMPL(void)::shrink_to_fit() { change_capacity(_size); }
-IMPL(void)::ensure_capacity_enough(size_type addition) {
-    if (_size + addition > _capacity) {
-        reserve((_size + addition + SPARE_SPACE) * 2);
+IMPL(void)::ensure_capacity_enough(size_type n) {
+    if (n > _capacity) {
+        change_capacity((n + SPARE_SPACE) * 2);
     }
 }
 IMPL()::ResizingArray(size_type initcap)
@@ -150,7 +148,7 @@ IMPL()::ResizingArray(size_type initcap)
 IMPL()::ResizingArray() : ResizingArray(SPARE_SPACE) {}
 IMPL()::ResizingArray(std::initializer_list<value_type> vals)
     : ResizingArray(vals.size() + SPARE_SPACE) {
-    for (auto &v : vals){
+    for (auto &v : vals) {
         push_back(v);
     }
 }
@@ -193,7 +191,7 @@ IMPL(auto)::operator[](size_type idx) const -> const_reference {
     return _data[idx];
 }
 IMPL(template <typename... TArgs> inline void)::emplace_back(TArgs &&... args) {
-    ensure_capacity_enough(1);
+    ensure_capacity_enough(_size + 1);
     construct(end(), std::forward<TArgs>(args)...);
     ++_size;
 }
@@ -218,9 +216,10 @@ IMPL(void)::assign(size_type n, const_reference val) {
 IMPL(template <typename InputIter> void)::assign(InputIter first,
                                                  InputIter last) {
     clear();
-    ensure_capacity_enough(std::distance(first, last));
+    auto dis = std::distance(first, last);
+    ensure_capacity_enough(dis);
     std::uninitialized_copy(first, last, _data);
-    _size = std::distance(first, last);
+    _size = dis;
 }
 IMPL(void)::assign(std::initializer_list<value_type> vals) {
     clear();
@@ -230,9 +229,8 @@ IMPL(void)::assign(std::initializer_list<value_type> vals) {
 }
 IMPL(void)::resize(size_type n, const_reference val) {
     if (n > _size) {
-        size_type addition = n - _size;
-        ensure_capacity_enough(addition);
-        std::uninitialized_fill_n(_data + _size, addition, val);
+        ensure_capacity_enough(n);
+        std::uninitialized_fill(end(), end() + n, val);
         _size = n;
     } else if (n < _size) {
         std::destroy(_data + n, _data + _size);
@@ -245,7 +243,7 @@ IMPL(auto)::at(size_type idx) -> reference {
         static_cast<const ResizingArray &>(*this).at(idx));
 }
 IMPL(auto)::at(size_type idx) const -> const_reference {
-    if (0 < idx && idx <= _size) throw std::out_of_range("Index out of range.");
+    if (idx < 0 || idx >= _size) throw std::out_of_range("Index out of range.");
     return _data[idx];
 }
 
@@ -331,7 +329,7 @@ inline bool operator>=(const ResizingArray<V, A> &lhs,
 }
 
 template <typename V, typename A>
-void swap(ResizingArray<V, A> &x, ResizingArray<V, A> &y) {
+inline void swap(ResizingArray<V, A> &x, ResizingArray<V, A> &y) {
     x.swap(y);
 }
 

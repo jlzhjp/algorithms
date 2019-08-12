@@ -88,7 +88,7 @@ inline bool operator>=(const Stack<V, C> &lhs, const Stack<V, C> &rhs) {
 }
 
 template <typename V, typename C>
-void swap(alg::Stack<V, C> &x, alg::Stack<V, C> &y) {
+inline void swap(alg::Stack<V, C> &x, alg::Stack<V, C> &y) {
     x.swap(y);
 }
 
