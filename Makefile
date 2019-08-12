@@ -8,7 +8,7 @@ RC = \033[0m
 ECHO_SUCCESS = echo -e "> $(G)Success$(RC)."
 
 ROOT = .
-CXX = g++
+CXX = clang++
 BUILD_DIR = $(ROOT)/build
 INC_DIR = $(ROOT)/inc
 SRC_DIR = $(ROOT)/src
@@ -50,8 +50,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(TEST_EXE): $(SHARED_LIB)
 	@$(MK_BIN_DIR)
 ifeq ($(TEST_TARGET),all)
-	@echo -e "$(B)Building: $(G)$(TEST_DIR)/*.cpp$(RC) -> $(G)$(TEST_EXE)$(RC)..."
-	@$(CXX) $(TEST_FLAGS) $(TEST_DIR)/*.cpp -o $(TEST_EXE)
+	@echo -e "$(B)Building: $(G)$(TEST_DIR)/*_test.cpp$(RC) -> $(G)$(TEST_EXE)$(RC)..."
+	@$(CXX) $(TEST_FLAGS) $(TEST_DIR)/*_test.cpp -o $(TEST_EXE)
 else
 	@echo -e "$(B)Building: $(G)$(TEST_TARGET)_test.cpp$(RC) -> $(G)$(TEST_EXE)$(RC)..."
 	@$(CXX) $(TEST_FLAGS) $(TEST_DIR)/$(TEST_TARGET)_test.cpp -o $(TEST_EXE)

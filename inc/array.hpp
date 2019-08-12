@@ -179,40 +179,36 @@ constexpr auto Array<T, N>::max_size() const noexcept -> size_type {
 }
 
 template <typename T, size_t N>
-constexpr bool operator==(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+inline bool operator==(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return lhs.size() == rhs.size() &&
            std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 template <typename T, size_t N>
-constexpr bool operator!=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+inline bool operator!=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+    return !(lhs == rhs);
+}
+template <typename T, size_t N>
+inline bool operator<(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
                                         rhs.end());
 }
 template <typename T, size_t N>
-constexpr bool operator<(const Array<T, N> &lhs, const Array<T, N> &rhs) {
-    return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
-                                        rhs.end());
-}
-template <typename T, size_t N>
-constexpr bool operator>(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+inline bool operator>(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return rhs < lhs;
 }
 template <typename T, size_t N>
-constexpr bool operator<=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+inline bool operator<=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return !(lhs > rhs);
 }
 template <typename T, size_t N>
-constexpr bool operator>=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
+inline bool operator>=(const Array<T, N> &lhs, const Array<T, N> &rhs) {
     return !(lhs < rhs);
 }
-
-}  // namespace alg
-
-namespace std {
 
 template <typename T, size_t N>
 inline void swap(alg::Array<T, N> &x, alg::Array<T, N> &y) {
     x.swap(y);
 }
+}  // namespace alg
 
-}  // namespace std
+

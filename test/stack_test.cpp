@@ -10,7 +10,7 @@ TEST(Stack, Constructor) {
     Stack<std::string> s2 = {"A", "B"};
     EXPECT_EQ(2, s2.size());
 
-    Stack<std::string> s3(Vector<std::string>({"A", "B"}));
+    Stack<std::string> s3(Stack<std::string>::container_type({"A", "B"}));
     EXPECT_EQ("B", s3.pop());
     EXPECT_EQ("A", s3.pop());
 }

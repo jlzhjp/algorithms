@@ -7,11 +7,11 @@
 #include <memory>
 #include <type_traits>
 
-#include "./vector.hpp"
+#include "resizing_array.hpp"
 
 namespace alg {
 
-template <typename T, typename TContainer = Vector<T>>
+template <typename T, typename TContainer = ResizingArray<T>>
 class Stack {
 public:
     using container_type = TContainer;
@@ -87,12 +87,9 @@ inline bool operator>=(const Stack<V, C> &lhs, const Stack<V, C> &rhs) {
     return !(lhs < rhs);
 }
 
-}  // namespace alg
-namespace std {
-
 template <typename V, typename C>
-void swap(alg::Stack<V, C> &lhs, alg::Stack<V, C> &rhs) {
-    lhs.swap(rhs);
+void swap(alg::Stack<V, C> &x, alg::Stack<V, C> &y) {
+    x.swap(y);
 }
 
-}  // namespace std
+}  // namespace alg

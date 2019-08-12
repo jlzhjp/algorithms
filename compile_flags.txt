@@ -1,4 +1,5 @@
 -std=c++1z
 -xc++
 -Wall
+-Werror
 -I./inc
