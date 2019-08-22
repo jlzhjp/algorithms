@@ -95,6 +95,7 @@ protected:
     void destroy(pointer p) noexcept;
     void ensure_capacity_enough(size_type n);
     void change_capacity(size_type n);
+    void set_size(size_type n);
 
 private:
     static constexpr size_type SPARE_SPACE = 16;
@@ -226,6 +227,9 @@ IMPL(void)::assign(std::initializer_list<value_type> vals) {
     ensure_capacity_enough(vals.size());
     std::uninitialized_copy_n(vals.begin(), vals.size(), _data);
     _size = vals.size();
+}
+IMPL(inline void)::set_size(size_type n) {
+    _size = n;
 }
 IMPL(void)::resize(size_type n, const_reference val) {
     if (n > _size) {

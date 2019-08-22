@@ -77,4 +77,3 @@ inline bool ge(const T &lhs, const T &rhs) {
 }
 
 }  // namespace alg
-

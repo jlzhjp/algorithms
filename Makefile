@@ -8,6 +8,7 @@ RC = \033[0m
 ECHO_OK = echo -e "> $(G)OK$(RC)."
 
 ROOT = .
+PYTHON = python3
 CXX = clang++
 BUILD_DIR = $(ROOT)/build
 INC_DIR = $(ROOT)/inc
@@ -21,6 +22,7 @@ TEST_EXE = $(BIN_DIR)/test
 MK_BIN_DIR = mkdir -p $(BIN_DIR)
 MK_OBJ_DIR = mkdir -p $(OBJ_DIR)
 
+TEST_FILES = $(shell ls -d $(TEST_DIR)/*_test.cpp)
 SRC_FILES = $(shell ls -d $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
@@ -47,10 +49,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@
 	@$(ECHO_OK)
 
-$(TEST_EXE): $(SHARED_LIB)
+$(TEST_EXE): $(SHARED_LIB) $(TEST_FILES)
 	@$(MK_BIN_DIR)
 ifeq ($(TEST_TARGET),all)
-	@echo -e "$(B)Building: $(G)$(TEST_DIR)/*_test.cpp$(RC) -> $(G)$(TEST_EXE)$(RC)..."
+	@echo -e "$(B)Building: $(G)$(TEST_FILES)$(RC) -> $(G)$(TEST_EXE)$(RC)..."
 	@$(CXX) $(TEST_FLAGS) $(TEST_DIR)/*_test.cpp -o $(TEST_EXE)
 else
 	@echo -e "$(B)Building: $(G)$(TEST_TARGET)_test.cpp$(RC) -> $(G)$(TEST_EXE)$(RC)..."

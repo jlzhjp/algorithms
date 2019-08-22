@@ -43,4 +43,5 @@ double evaluate(const std::string &expr) {
     }
     return vals.pop();
 }
+
 }  // namespace alg
