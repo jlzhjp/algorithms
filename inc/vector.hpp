@@ -42,10 +42,9 @@ public:
 
 private:
     iterator make_iter(const_iterator iter);
-    template <typename BidIt1, typename BidIt2>
-    BidIt2 uninitialized_move_backward(BidIt1 first, BidIt1 last,
-                                       BidIt2 d_last);
 };
+
+// -----------------------------------------------------------------------------
 
 #define IMPL(declaration...)          \
     template <typename V, typename A> \
@@ -58,11 +57,12 @@ IMPL(inline auto)::make_iter(const_iterator iter) -> iterator {
 IMPL(template <typename... TArgs> auto)::emplace(const_iterator pos,
                                                  TArgs &&... args) -> iterator {
     iterator ne = std::next(this->end());
+    iterator mp = make_iter(pos);
     this->ensure_capacity_enough(this->size() + 1);
-    alg::uninitialized_move_backward(make_iter(pos), this->end(), ne);
+    uninit_move_backward_using_alloc(this->alloc(), mp, this->end(), ne);
     this->construct(make_iter(pos), std::forward<TArgs>(args)...);
     this->set_size(this->size() + 1);
-    return make_iter(pos);
+    return mp;
 }
 
 IMPL(inline auto)::insert(const_iterator pos, const_reference val) -> iterator {
@@ -76,55 +76,61 @@ IMPL(inline auto)::insert(const_iterator pos, value_type &&val) -> iterator {
 IMPL(template <typename InputIt> auto)::insert(const_iterator pos,
                                                InputIt first, InputIt last)
     -> iterator {
-    static_assert(std::is_assignable_v<
-                      typename std::iterator_traits<InputIt>::iterator_category,
-                      std::input_iterator_tag>,
-                  "InputIt must be an input iterator.");
+    static_assert(
+        std::is_base_of_v<
+            std::input_iterator_tag,
+            typename std::iterator_traits<InputIt>::iterator_category>,
+        "InputIt must be an input iterator.");
     auto distance = std::distance(first, last);
     size_type ns = this->size() + distance;
     iterator ne = this->end() + distance;
+    iterator mp = make_iter(pos);
     this->ensure_capacity_enough(ns);
-    alg::uninitialized_move_backward(make_iter(pos), this->end(), ne);
-    std::uninitialized_copy(first, last, make_iter(pos));
+    uninit_move_backward_using_alloc(this->alloc(), mp, this->end(), ne);
+    uninit_copy_using_alloc(this->alloc(), first, last, mp);
     this->set_size(ns);
-    return make_iter(pos);
+    return mp;
 }
 
 IMPL(auto)::insert(const_iterator pos, std::initializer_list<value_type> vals)
     -> iterator {
     size_type ns = this->size() + vals.size();
     iterator ne = this->end() + vals.size();
+    iterator mp = make_iter(pos);
     this->ensure_capacity_enough(ns);
-    alg::uninitialized_move_backward(make_iter(pos), this->end(), ne);
-    std::uninitialized_copy(vals.begin(), vals.end(), make_iter(pos));
+    uninit_move_backward_using_alloc(this->alloc(), mp, this->end(), ne);
+    uninit_copy_using_alloc(this->alloc(), vals.begin(), vals.end(), mp);
     this->set_size(ns);
-    return make_iter(pos);
+    return mp;
 }
 
 IMPL(auto)::insert(const_iterator pos, size_type count, const_reference val)
     -> iterator {
     size_type ns = this->size() + count;
     iterator ne = this->end() + count;
+    iterator mp = make_iter(pos);
     this->ensure_capacity_enough(this->size() + count);
-    alg::uninitialized_move_backward(make_iter(pos), this->end(), ne);
-    std::uninitialized_fill_n(make_iter(pos), count, val);
+    uninit_move_backward_using_alloc(this->alloc(), mp, this->end(), ne);
+    uninit_fill_n_using_alloc(this->alloc(), mp, count, val);
     this->set_size(ns);
     return make_iter(pos);
 }
 
 IMPL(auto)::erase(const_iterator pos) -> iterator {
-    this->destroy(make_iter(pos));
-    std::uninitialized_move(std::next(make_iter(pos)), this->end(),
-                            make_iter(pos));
+    iterator mp = make_iter(pos);
+    this->destroy(mp);
+    uninit_move_using_alloc(this->alloc(), std::next(mp), this->end(), mp);
     this->set_size(this->size() - 1);
-    return make_iter(pos);
+    return mp;
 }
 
 IMPL(auto)::erase(const_iterator first, const_iterator last) -> iterator {
-    std::destroy(make_iter(first), make_iter(last));
-    std::uninitialized_move(make_iter(last), this->end(), make_iter(first));
+    iterator mf = make_iter(first), ml = make_iter(last);
+
+    std::destroy(mf, ml);
+    uninit_move_using_alloc(this->alloc(), ml, this->end(), mf);
     this->set_size(this->size() - std::distance(first, last));
-    return make_iter(first);
+    return mf;
 }
 
 }  // namespace alg

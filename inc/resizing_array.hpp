@@ -6,6 +6,8 @@
 #include <limits>
 #include <memory>
 
+#include <memory.hpp>
+
 namespace alg {
 
 template <typename V, typename A = std::allocator<V>>
@@ -95,7 +97,8 @@ protected:
     void destroy(pointer p) noexcept;
     void ensure_capacity_enough(size_type n);
     void change_capacity(size_type n);
-    void set_size(size_type n);
+    allocator_type &alloc() noexcept;
+    void set_size(size_type n) noexcept;
 
 private:
     static constexpr size_type SPARE_SPACE = 16;
@@ -120,7 +123,7 @@ IMPL(inline void)::deallocate(pointer p, size_type n) noexcept {
     alloc_traits::deallocate(_alloc, p, n);
 }
 IMPL(template <typename... TArgs> inline void)::construct(pointer p,
-                                                   TArgs &&... args) {
+                                                          TArgs &&... args) {
     alloc_traits::construct(_alloc, p, std::forward<TArgs>(args)...);
 }
 IMPL(inline void)::destroy(pointer p) noexcept {
@@ -128,7 +131,7 @@ IMPL(inline void)::destroy(pointer p) noexcept {
 }
 IMPL(void)::change_capacity(size_type n) {
     pointer newp = allocate(n);
-    std::uninitialized_move_n(_data, _size, newp);
+    uninit_move_n_using_alloc(_alloc, _data, _size, newp);
     deallocate(_data, _capacity);
     _data = newp;
     _capacity = n;
@@ -158,7 +161,7 @@ IMPL()::ResizingArray(const ResizingArray &rhs)
       _capacity(rhs.capacity()),
       _size(rhs.size()),
       _alloc(rhs.get_allocator()) {
-    std::uninitialized_copy_n(rhs.data(), rhs.size(), _data);
+    uninit_copy_n_using_alloc(_alloc, rhs.data(), rhs.size(), _data);
 }
 IMPL()::ResizingArray(ResizingArray &&rhs) : ResizingArray(0) { swap(rhs); }
 IMPL()::~ResizingArray() {
@@ -205,13 +208,13 @@ IMPL(void)::pop_back() {
     --_size;
 }
 IMPL(void)::clear() {
-    std::destroy(begin(), end());
+    destroy_n_using_alloc(_alloc, _data, _size);
     _size = 0;
 }
 IMPL(void)::assign(size_type n, const_reference val) {
     clear();
     ensure_capacity_enough(n);
-    std::uninitialized_fill_n(_data, n, val);
+    uninit_fill_n_using_alloc(_alloc, _data, n, val);
     _size = n;
 }
 IMPL(template <typename InputIter> void)::assign(InputIter first,
@@ -219,25 +222,24 @@ IMPL(template <typename InputIter> void)::assign(InputIter first,
     clear();
     auto dis = std::distance(first, last);
     ensure_capacity_enough(dis);
-    std::uninitialized_copy(first, last, _data);
+    uninit_copy_using_alloc(_alloc, first, last, _data);
     _size = dis;
 }
 IMPL(void)::assign(std::initializer_list<value_type> vals) {
     clear();
     ensure_capacity_enough(vals.size());
-    std::uninitialized_copy_n(vals.begin(), vals.size(), _data);
+    uninit_copy_n_using_alloc(_alloc, vals.begin(), vals.size(), _data);
     _size = vals.size();
 }
-IMPL(inline void)::set_size(size_type n) {
-    _size = n;
-}
+IMPL(inline auto)::alloc() noexcept -> allocator_type & { return _alloc; }
+IMPL(inline void)::set_size(size_type n) noexcept { _size = n; }
 IMPL(void)::resize(size_type n, const_reference val) {
     if (n > _size) {
         ensure_capacity_enough(n);
-        std::uninitialized_fill(end(), end() + n, val);
+        uninit_fill_n_using_alloc(_alloc, end(), n, val);
         _size = n;
     } else if (n < _size) {
-        std::destroy(_data + n, _data + _size);
+        destroy_using_alloc(_alloc, _data + n, _data + _size);
         _size = n;
     }
 }
