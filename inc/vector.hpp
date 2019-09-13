@@ -13,15 +13,17 @@ private:
     using Base = ResizingArray<V, A>;
 
 public:
-    using typename Base::const_iterator;
-    using typename Base::const_pointer;
+    using typename Base::value_type;
+    using typename Base::reference;
     using typename Base::const_reference;
+    using typename Base::pointer;
+    using typename Base::const_pointer;
+    using typename Base::size_type;
     using typename Base::difference_type;
     using typename Base::iterator;
-    using typename Base::pointer;
-    using typename Base::reference;
-    using typename Base::size_type;
-    using typename Base::value_type;
+    using typename Base::const_iterator;
+    using typename Base::reverse_iterator;
+    using typename Base::const_reverse_iterator;
 
 public:
     using Base::ResizingArray;
@@ -49,6 +51,9 @@ private:
 #define IMPL(declaration...)          \
     template <typename V, typename A> \
     declaration Vector<V, A>
+
+// n* -> new *
+// m* -> non-const *
 
 IMPL(inline auto)::make_iter(const_iterator iter) -> iterator {
     return this->data() + (iter - this->data());

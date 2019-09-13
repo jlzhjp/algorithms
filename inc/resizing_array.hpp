@@ -35,7 +35,7 @@ public:
     ResizingArray(std::initializer_list<value_type> vals);
     ResizingArray(const ResizingArray &rhs);
     ResizingArray(ResizingArray &&rhs);
-    ~ResizingArray();
+    virtual ~ResizingArray();
 
 public:
     ResizingArray &operator=(const ResizingArray &rhs);
@@ -233,6 +233,8 @@ IMPL(void)::assign(std::initializer_list<value_type> vals) {
 }
 IMPL(inline auto)::alloc() noexcept -> allocator_type & { return _alloc; }
 IMPL(inline void)::set_size(size_type n) noexcept { _size = n; }
+
+// FIXME: Vector::resize is not exception safe.
 IMPL(void)::resize(size_type n, const_reference val) {
     if (n > _size) {
         ensure_capacity_enough(n);
@@ -262,10 +264,10 @@ IMPL(inline auto)::end() const noexcept -> const_iterator {
 IMPL(inline auto)::cbegin() const -> const_iterator { return begin(); }
 IMPL(inline auto)::cend() const -> const_iterator { return end(); }
 IMPL(inline auto)::rbegin() noexcept -> reverse_iterator {
-    return reverse_iterator(begin());
+    return reverse_iterator(end() - 1);
 }
 IMPL(inline auto)::rend() noexcept -> reverse_iterator {
-    return reverse_iterator(end());
+    return reverse_iterator(begin() - 1);
 }
 IMPL(inline auto)::rbegin() const noexcept -> const_reverse_iterator {
     return rbegin();
