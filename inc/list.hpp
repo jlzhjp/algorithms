@@ -49,7 +49,6 @@ private:
     using NodePointer = typename NodeAllocTraits::pointer;
 
 private:
-    static_assert(std::is_pod_v<Node>);
     struct Node {
         Node() = default;
         Node(const_reference d, Node *p = nullptr, Node *n = nullptr)
@@ -118,7 +117,8 @@ private:
 
 public:
     List();
-    List(size_type count, const T &val = T());
+    explicit List (size_type count, const T &val = T());
+    List(std::initializer_list<value_type> vals);
     List(const List &rhs);
     List(List &&rhs) noexcept;
     List &operator=(const List &rhs);
@@ -157,6 +157,8 @@ public:
     template <typename... TArgs>
     reference emplace_front(TArgs &&... args);
     void pop_front();
+    iterator erase(const_iterator pos);
+    iterator erase(const_iterator first, const_iterator last);
     void resize(size_type count);
     void resize(size_type count, const_reference val);
     void swap(List &other) noexcept;
@@ -204,7 +206,7 @@ IMPL(template <typename... TArgs>
     NodePointer p = NodeAllocTraits::allocate(_nodeAlloc, 1);
     p->prev = prev;
     p->next = next;
-    AllocTraits::construct(_alloc, &p->data, std::forward<value_type>(args)...);
+    AllocTraits::construct(_alloc, &p->data, std::forward<TArgs>(args)...);
     return p;
 }
 
@@ -216,6 +218,37 @@ IMPL()::List(size_type count, const T &val) : List() {
     for (int i = 0; i < count; ++i) {
         push_back(val);
     }
+}
+IMPL()::List(std::initializer_list<value_type> vals) : List() {
+    for (auto &val : vals) {
+        push_back(val);
+    }
+}
+IMPL()::List(const List &rhs) : List() {
+    for (auto &v : rhs) {
+        push_back(v);
+    }
+}
+IMPL()::List(List &&rhs) noexcept : List() {
+   for (auto &v : rhs) {
+       push_back(std::move(v));
+   }
+   rhs.resize(0);
+}
+IMPL(auto)::operator=(const List &rhs) -> List & {
+    List tmp(rhs);
+    swap(tmp);
+}
+IMPL(auto)::operator=(List &&rhs) -> List & {
+    List tmp(std::move(rhs));
+    swap(tmp);
+}
+IMPL(void)::swap(List &other) noexcept {
+    if (other == *this) return;
+    std::swap(_size, other._size);
+    std::swap(_entry, other._entry);
+    std::swap(_alloc, other._alloc);
+    std::swap(_nodeAlloc, other._nodeAlloc);
 }
 IMPL()::~List() {
     Node *p = _entry;
@@ -287,7 +320,6 @@ IMPL(auto)::insert(const_iterator pos, std::initializer_list<value_type> vals)
     for (auto &val : vals) {
         emplace(pos++, val);
     }
-    _size += vals.size();
     return iterator(prev->next);
 }
 IMPL(auto)::insert(const_iterator pos, size_type count, const T &val)
@@ -296,7 +328,6 @@ IMPL(auto)::insert(const_iterator pos, size_type count, const T &val)
     for (size_type i = 0; i < count; ++i) {
         emplace(pos++, val);
     }
-    _size += count;
     return iterator(prev->next);
 }
 IMPL(void)::push_back(const_reference val) { insert(end(), val); }
@@ -306,6 +337,36 @@ IMPL(void)::push_back(value_type &&val) {
 IMPL(void)::push_front(const_reference val) { insert(begin(), val); }
 IMPL(void)::push_front(value_type &&val) {
     insert(begin(), std::forward<value_type>(val));
+}
+IMPL(auto)::erase(const_iterator pos) -> iterator {
+    Node *n = pos.get_node();
+    Node *np = n->prev;
+    Node *nn = n->next;
+    NodeAllocTraits::deallocate(_nodeAlloc, n, 1);
+    np->next = nn;
+    return Node(nn);
+}
+IMPL(auto)::erase(const_iterator first, const_iterator last) -> iterator {
+    if (first == last) return make_iter(first);
+    Node *nf = first.get_node(), *nl = last.get_node(), *np = nf->prev;
+    for (Node *n = nf; n != nl; ++n) {
+        NodeAllocTraits::deallocate(_nodeAlloc, n, 1);
+    }
+    np->next = nl;
+    return make_iter(last);
+}
+IMPL(void)::pop_front() { erase(begin()); }
+IMPL(void)::resize(size_type count) { resize(count, value_type()); }
+IMPL(void)::resize(size_type count, const_reference val) {
+    if (count > _size) {
+        for (int i = _size; i != count; ++i) {
+            push_back(val);
+        }
+    } else if (count < _size) {
+        for (int i = count; i != _size; ++i) {
+            pop_back();
+        }
+    }
 }
 
 }  // namespace alg
