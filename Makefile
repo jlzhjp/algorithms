@@ -9,7 +9,7 @@ ECHO_OK = echo -e "> $(G)OK$(RC)."
 
 ROOT = .
 PYTHON = python3
-CXX = clang++
+CXX = g++
 BUILD_DIR = $(ROOT)/build
 INC_DIR = $(ROOT)/inc
 SRC_DIR = $(ROOT)/src
@@ -26,7 +26,7 @@ TEST_FILES = $(shell ls -d $(TEST_DIR)/*_test.cpp)
 SRC_FILES = $(shell ls -d $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-CXXFLAGS = -std=c++1z -xc++ -Wall -Werror -I$(INC_DIR)
+CXXFLAGS = -std=c++1z -xc++ -Wall -Werror -I$(INC_DIR) -g
 TEST_FLAGS = $(CXXFLAGS) \
 			 -Wl,-rpath,'$$ORIGIN' \
 			 -L$(BIN_DIR) \
