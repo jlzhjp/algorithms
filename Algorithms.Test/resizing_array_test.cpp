@@ -100,10 +100,10 @@ TEST(ResizingArray, Swap) {
 }
 TEST(ResizingArray, Stress) {
     ResizingArray<std::string> a(0);
-    for (int i = 0; i <= 10000; ++i) {
+    for (int i = 0; i <= 100; ++i) {
         a.push_back(std::to_string(i));
     }
-    for (int i = 10000; i >= 0; --i) {
+    for (int i = 100; i >= 0; --i) {
         EXPECT_EQ(std::to_string(i), a.back());
         a.pop_back();
     }

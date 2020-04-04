@@ -32,7 +32,7 @@ public:
 
 public:
     Stack &operator=(Stack &) = default;
-    Stack &operator=(Stack &&) = default;
+    Stack &operator=(Stack &&) noexcept = default;
 
 public:
     value_type pop() {

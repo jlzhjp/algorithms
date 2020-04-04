@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <iostream>
-#include "../vector.hpp"
 
 namespace alg {
 // 如果找到, 返回 [first, last) 之间的迭代器
